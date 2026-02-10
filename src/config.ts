@@ -8,6 +8,37 @@ type Config = {
     currentUserName?: string;
 }
 
+type CommandHandler = (cmdName: string, ...args: string[]) => void;
+
+export type CommandsRegistry = Record<string, CommandHandler>;
+
+
+
+
+export function registerCommand(registry: CommandsRegistry, cmdName: string, handler: CommandHandler){
+    registry[cmdName] = handler;
+}
+
+//handler to inaczej "obsługiwacz"
+
+
+export function runCommand(registry: CommandsRegistry, cmdName: string, ...args: string[]){
+    if (!(cmdName in registry)) {
+        throw Error("Unknown command");
+    }
+
+    registry[cmdName](cmdName, ...args);
+
+}
+
+export function handlerLogin(cmdName: string, ...args: string[]){
+    if (args.length === 0){
+        throw Error("Command login requires a username.");
+    }
+    setUser(args[0]);
+    console.log(`User set to ${args[0]}`);
+}
+
 export function setUser(name: string) {
     const odczytanyCfg = readConfig();
     writeConfig({ dbUrl: odczytanyCfg.dbUrl, currentUserName: name });
