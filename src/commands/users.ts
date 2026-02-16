@@ -1,10 +1,45 @@
+import { createUser, getUser, deleteAllUsers } from "src/lib/queries/users.js";
 import { setUser } from "../config.js"
 
-export function handlerLogin(cmdName: string, ...args: string[]) {
+export async function handlerLogin(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <name>`);
     }
     const userName = args[0];
-    setUser(userName);
-    console.log("User switched successfully!");
+    const uzytkownik = await getUser(userName);
+
+
+    if (uzytkownik) {
+        setUser(userName);
+        console.log("User switched successfully!");
+
+    } else {
+        throw new Error(`User ${userName} doesn't exist!`)
+    }
+}
+
+export async function handlerRegister(cmdName: string, ...args: string[]) {
+    if (args.length !== 1) {
+        throw new Error(`usage: ${cmdName} <name>`);
+    }
+
+    const userName = args[0];
+    const uzytkownik = await getUser(userName);
+
+    if (!uzytkownik) {
+        const utworzony = await createUser(userName);
+        setUser(utworzony.name);
+        console.log(`New user ${userName} succesfully added`);
+        console.log(utworzony);
+
+    } else {
+        throw new Error(`User ${userName} already exist!`)
+    }
+
+}
+
+export async function handlerReset(cmdName: string, ...args: string[]) {
+
+    await deleteAllUsers();
+    process.exit(0);
 }
