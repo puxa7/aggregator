@@ -1,6 +1,6 @@
 import { createUser, getUser, deleteAllUsers, getUsers } from "src/lib/queries/users.js";
 import { setUser, readConfig } from "../config.js"
-
+import { fetchFeed } from "src/rss.js";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
@@ -59,4 +59,11 @@ export async function handlerUsers(cmdName: string, ...args: string[]) {
         }
     }
     process.exit(0);
+}
+
+export async function handlerAgg(cmdName: string, ...args: string[]) {
+
+    await fetchFeed("https://www.wagslane.dev/index.xml");
+
+
 }

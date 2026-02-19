@@ -42,8 +42,6 @@ function getConfigFilePath() {
     const homeDir = os.homedir();
     return path.join(homeDir, configFileName);
 }
-
-
  
 
 function writeConfig(config: Config){
@@ -58,3 +56,4 @@ function writeConfig(config: Config){
     
     fs.writeFileSync(fullPath, data, { encoding: "utf-8" });
 }
+
