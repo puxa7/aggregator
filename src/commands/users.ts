@@ -1,6 +1,8 @@
 import { createUser, getUser, deleteAllUsers, getUsers } from "src/lib/queries/users.js";
+import { createFeed } from "src/lib/queries/feeds.js";
 import { setUser, readConfig } from "../config.js"
 import { fetchFeed } from "src/rss.js";
+import { printFeed } from "./helpers.js";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
@@ -66,4 +68,19 @@ export async function handlerAgg(cmdName: string, ...args: string[]) {
     await fetchFeed("https://www.wagslane.dev/index.xml");
 
 
+}
+
+export async function handlerAddfeed(cmdName: string, ...args: string[]){
+    if (args.length !== 2) {
+        throw new Error(`usage: ${cmdName} <name> <url>`);
+    }
+    
+    const name = args[0];
+    const url = args[1];
+
+    const userObiekt = await getUser(readConfig().currentUserName);
+
+    const zwrocone = await createFeed(name, url, userObiekt.id);
+    printFeed(zwrocone, userObiekt);
+    //console.log(zwrocone);
 }

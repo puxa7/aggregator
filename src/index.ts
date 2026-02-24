@@ -1,6 +1,6 @@
 import { type CommandsRegistry } from "./commands/commands.js";
 import { registerCommand, runCommand } from "./commands/commands.js"
-import { handlerLogin, handlerRegister, handlerReset, handlerUsers, handlerAgg } from "./commands/users.js";
+import { handlerLogin, handlerRegister, handlerReset, handlerUsers, handlerAgg, handlerAddfeed } from "./commands/users.js";
 
 
 async function main() {
@@ -20,6 +20,7 @@ async function main() {
   registerCommand(commandRegistry, "reset", handlerReset);
   registerCommand(commandRegistry, "users", handlerUsers);
   registerCommand(commandRegistry, "agg", handlerAgg);
+  registerCommand(commandRegistry, "addfeed", handlerAddfeed);
 
 
   try {

@@ -8,6 +8,13 @@
       "when": 1770919773656,
       "tag": "0000_rapid_warhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771784020866,
+      "tag": "0001_optimal_grandmaster",
+      "breakpoints": true
     }
   ]
 }
