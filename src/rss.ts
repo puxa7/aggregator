@@ -77,7 +77,3 @@ export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
     }
   }
 }
-
-export async function addFeed(){
-  
-}
