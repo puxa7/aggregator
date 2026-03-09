@@ -84,8 +84,14 @@ export default async function handlerAddFeed(cmdName: string, ...args: string[])
 
     const zwrocone = await createFeed(name, url, userObiekt.id);
     printFeed(zwrocone, userObiekt);
-   
-    
+    ////////////
+    const feed = await getFeedByUrl(url);
+    if (!feed) {
+        console.error("Feed not found for URL:", url);
+    }
+    const follow = await createFeedFollow(userObiekt.id, feed.id);
+    console.log(`Now following "${follow.feedName}" as ${follow.userName}`);
+
 }
 
 export async function handlerFeeds(cmdName: string) {
@@ -104,7 +110,6 @@ export async function handlerFeeds(cmdName: string) {
 }
 
 export async function handlerFollow(cmdName: string, ...args: string[]) {
-
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <url>`);
     }
@@ -122,12 +127,6 @@ export async function handlerFollow(cmdName: string, ...args: string[]) {
     }
 
     const follow = await createFeedFollow(user.id, feed.id);
-
-    ///
-    //console.log("name of the feed");
-
-    ///
-    //console.log("current user");
 
     console.log(`Now following "${follow.feedName}" as ${follow.userName}`);
 }
