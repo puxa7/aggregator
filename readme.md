@@ -1,14 +1,14 @@
-"login", handlerLogin;
-"register", handlerRegister;
-"reset", handlerReset);
-"users", handlerUsers);
+"login"
+"register"
+"reset",
+"users"
 
-"addfeed", handlerAddfeed); - dodaj kanał RSS
-"feeds", handlerFeeds);  - wyświetl kanały RSS
-"follow", handlerFollow); - łączy zalogowanego  użytkownika z Kanałem RSS (dodaje rekord do feed_folows)
-"following", handlerFollowing); - wyświetl wszsytkie nazwy kanałó RSS które śledzi użytkownik
+"addfeed" - dodaj kanał RSS
+"feeds"  - wyświetl kanały RSS
+"follow" - łączy zalogowanego użytkownika z Kanałem RSS (dodaje rekord do feed_folows)
+"following" - wyświetl wszsytkie nazwy kanałó RSS które śledzi użytkownik
 
-"agg", handlerAgg); - wyświetla zawartość linku https://www.wagslane.dev/index.xml
+"agg" - wyświetla zawartość linku https://www.wagslane.dev/index.xml
 
 SQL
 sudo -u postgres  psql

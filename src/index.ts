@@ -1,6 +1,11 @@
-import { type CommandsRegistry } from "./commands/commands.js";
-import { registerCommand, runCommand } from "./commands/commands.js"
-import handlerAddfeed, {
+import {
+  type CommandsRegistry,
+  middlewareLoggedIn,
+  registerCommand,
+  runCommand,
+} from "./commands/commands.js";
+import  {
+  handlerAddFeed,
   handlerLogin,
   handlerRegister,
   handlerReset,
@@ -8,7 +13,8 @@ import handlerAddfeed, {
   handlerAgg,
   handlerFeeds,
   handlerFollow,
-  handlerFollowing
+  handlerFollowing,
+  handlerUnfollow,
 } from "./commands/users.js";
 
 
@@ -29,10 +35,27 @@ async function main() {
   registerCommand(commandRegistry, "reset", handlerReset);
   registerCommand(commandRegistry, "users", handlerUsers);
   registerCommand(commandRegistry, "agg", handlerAgg);
-  registerCommand(commandRegistry, "addfeed", handlerAddfeed);
+  registerCommand(
+    commandRegistry,
+    "addfeed",
+    middlewareLoggedIn(handlerAddFeed),
+  );
   registerCommand(commandRegistry, "feeds", handlerFeeds);
-  registerCommand(commandRegistry, "follow", handlerFollow);
-  registerCommand(commandRegistry, "following", handlerFollowing);
+  registerCommand(
+    commandRegistry,
+    "follow",
+    middlewareLoggedIn(handlerFollow),
+  );
+  registerCommand(
+    commandRegistry,
+    "unfollow",
+    middlewareLoggedIn(handlerUnfollow),
+  );
+  registerCommand(
+    commandRegistry,
+    "following",
+    middlewareLoggedIn(handlerFollowing),
+  );
 
   try {
     await runCommand(commandRegistry, cmdName, ...cmdArgs)

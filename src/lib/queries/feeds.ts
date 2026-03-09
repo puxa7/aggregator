@@ -1,14 +1,6 @@
-import { ConsoleLogWriter, eq, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../db/index";
 import { feedFollows, feeds, users } from "../db/schema";
-
-/*
-gator=# SELECT * FROM feeds;
- id | created_at | updated_at | name | url | user_id 
-----+------------+------------+------+-----+---------
-(0 rows)
-
-*/
 
 export async function createFeed(name: string, url: string, userId: string) {
     const [result] = await db.insert(feeds).values({ name, url, user_id: userId }).returning();
@@ -48,25 +40,26 @@ export async function createFeedFollow(userId: string, feedId: string) {
 
 }
 
+export async function getFeedFollowByUserAndFeed(userId: string, feedId: string) {
+    const [follow] = await db
+        .select({
+            id: feedFollows.id,
+            createdAt: feedFollows.createdAt,
+            updatedAt: feedFollows.updatedAt,
+            userId: feedFollows.userId,
+            feedId: feedFollows.feedId,
+            userName: users.name,
+            feedName: feeds.name,
+        })
+        .from(feedFollows)
+        .innerJoin(users, eq(feedFollows.userId, users.id))
+        .innerJoin(feeds, eq(feedFollows.feedId, feeds.id))
+        .where(and(eq(feedFollows.userId, userId), eq(feedFollows.feedId, feedId)));
+
+    return follow ?? null;
+}
+
 export async function getFeedFollowsForUser() {
-    /*Ta funkcja powinna znaleźć wszystkie kanały RSS, które śledzi konkretny użytkownik.
-     W wyniku ma być nazwa użytkownika oraz nazwa kanału RSS.*/
-
-    /*SELECT users.name, feeds.name FROM feed_follows
-    INNER JOIN users
-    ON feed_follows.user_id = users.id
-    INNER JOIN feeds
-    ON feed_follows.feed_id = feeds.id;*/
-
-
-
-     /* const user_and_rss = await db.execute(sql`
-      SELECT users.name, feeds.name FROM feed_follows
-        INNER JOIN users
-        ON feed_follows.user_id = users.id
-        INNER JOIN feeds
-        ON feed_follows.feed_id = feeds.id;
-        `);*/
 
     const user_and_rss = await db
         .select({ userName: users.name, feedName: feeds.name })
@@ -74,8 +67,16 @@ export async function getFeedFollowsForUser() {
         .innerJoin(users, eq(feedFollows.userId, users.id))
         .innerJoin(feeds, eq(feedFollows.feedId, feeds.id));
 
-    
-
     return user_and_rss;
 
+}
+
+export async function deleteFeedFollow(userId: string, feedUrl: string) {
+    const feed = await getFeedByUrl(feedUrl);
+    if (!feed) {
+        throw new Error(`Feed with URL ${feedUrl} not found`);
+    }
+    await db
+        .delete(feedFollows)
+        .where(and(eq(feedFollows.userId, userId), eq(feedFollows.feedId, feed.id)));
 }
