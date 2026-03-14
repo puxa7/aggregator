@@ -4,7 +4,7 @@ import {
   registerCommand,
   runCommand,
 } from "./commands/commands.js";
-import  {
+import {
   handlerAddFeed,
   handlerLogin,
   handlerRegister,
@@ -15,6 +15,8 @@ import  {
   handlerFollow,
   handlerFollowing,
   handlerUnfollow,
+  handlerDeleteFeed,
+  handlerBrowse,
 } from "./commands/users.js";
 
 
@@ -55,6 +57,12 @@ async function main() {
     commandRegistry,
     "following",
     middlewareLoggedIn(handlerFollowing),
+  );
+  registerCommand(commandRegistry, "deletefeed", middlewareLoggedIn(handlerDeleteFeed));
+  registerCommand(
+    commandRegistry,
+    "browse",
+    middlewareLoggedIn(handlerBrowse),
   );
 
   try {

@@ -66,7 +66,6 @@ export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
 
   }
 
-  console.log(validItems);
 
   return {
     channel: {
