@@ -1,4 +1,3 @@
-//import {  } from "drizzle-orm/gel-core";
 import { pgTable, timestamp, uuid, text, uniqueIndex } from "drizzle-orm/pg-core";
 
 export type Feed = typeof feeds.$inferSelect; // feeds is the table object in schema.ts
